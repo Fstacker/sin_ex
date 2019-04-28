@@ -1,14 +1,16 @@
 require 'sinatra'
 
-
 #1. Get the user's birthday and store in a variable
+=begin
 def get_birthday
 	puts "Tell me your birtday.  Use the format: MMDDYYYY\n*beep boop*"
 	birthdate = gets
 end
+=end
 
 #2. Take the user's response and calculate the birth path number
 def get_birth_path_num(birthdate)
+	birthdate = 07041774
 	number = birthdate[0].to_i + birthdate[1].to_i + birthdate[2].to_i + birthdate[3].to_i + birthdate[4].to_i + birthdate[5].to_i + birthdate[6].to_i + birthdate[7].to_i
 
 	number = number.to_s
@@ -52,17 +54,14 @@ end
 
 
 
+get '/newpage' do
+	# contents of new page
+	erb :newpage
+end
+
 get '/:birthdate' do
 	birthdate = params[:birthdate]
 	birth_path_num = get_birth_path_num(birthdate)
-	@message = get_message(birth_path_num) + "#{@message}"
+	@message = get_message(birth_path_num)
+	erb :index
 end
-
-
-=begin
-get '/:birthdate' do
-  birthdate = params[:birthdate]
-  birth_path_num = get_birth_path_num(birthdate)
-  @message = "Your numerology number is #{birth_path_num}. " + get_message(birth_path_num)
-  erb :index
-=end
