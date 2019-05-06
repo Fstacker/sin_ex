@@ -1,14 +1,6 @@
 require 'sinatra'
 
-#1. Get the user's birthday and store in a variable
-=begin
-def get_birthday
-	puts "Tell me your birtday.  Use the format: MMDDYYYY\n*beep boop*"
-	birthdate = gets
-end
-=end
-
-#2. Take the user's response and calculate the birth path number
+# Take the user's entry from the form input and calculate the birth path number
 def get_birth_path_num(birthdate)
 	number = birthdate[0].to_i + birthdate[1].to_i + birthdate[2].to_i + birthdate[3].to_i + birthdate[4].to_i + birthdate[5].to_i + birthdate[6].to_i + birthdate[7].to_i
 
@@ -18,14 +10,14 @@ def get_birth_path_num(birthdate)
 	if number > 9
 		number = number.to_s
 		
-		#3.  Assign the return value to a variable
+		# Assign the return value to a variable
 		number = number[0].to_i + number[1].to_i
 	end
 
 	return number
 end
 
-#4.  Create a method that returns a specific message that corresponds to the birth path number.
+# Create a method that returns a specific message that corresponds to the birth path number.
 def get_message(number)
 	case number
 	when 1
@@ -52,8 +44,29 @@ def get_message(number)
 end
 
 
+get '/:birthdate' do
+	setup_index_view
+end
+
+get '/message/:birth_path_num' do
+	birth_path_num = params[:birth_path_num].to_i
+	@message = get_message(birth_path_num)
+	erb :index
+end
+
 get '/' do
 	erb :form
+end
+
+post '/' do 
+	birthdate = params[:birthdate].gsub("-","")
+	if valid_birthdate(birthdate)
+		birth_path_num = get_birth_path_num(birthdate)
+		redirect "/message/#{birth_path_num}"
+	else
+		@error = "We do not recognize your DOB format.  Please try again."
+		erb :form
+	end
 end
 
 #refactored get :birthdate and post :birthdate into a setup_index_view call
@@ -64,35 +77,18 @@ def setup_index_view
 	erb :index
 end
 
-get '/message/:birth_path_num' do
-	birth_path_num = params[:birth_path_num].to_i
-	@message = get_message(birth_path_num)
-	erb :index
-end
-
-post '/' do 
-	birthdate = params[:birthdate].gsub("-","")
-	birth_path_num = get_birth_path_num(birthdate)
-	redirect "message/#{birth_path_num}"
-end
-
-post '/' do
-	setup_index_view
+def valid_birthdate(input)
+	#define the test; test for value of input form to return TRUE
+	if (input.length == 8 && !input.match(/^[0-9]+[0-9]$/).nil?)
+		true
+	else
+		false
+	end
 end
 
 
-=begin
-get '/:birthdate' do
-	birthdate = params[:birthdate]
-	birth_path_num = get_birth_path_num(birthdate)
-	@message = "Your numerology number is #{birth_path_num}.  " + get_message(birth_path_num)
-	erb :index
-end
 
-post '/' do
-	birthdate = params[:birthdate]
-	birth_path_num = get_birth_path_num(birthdate)
-	@message = "Your numerology number is #{birth_path_num}.  " + get_message(birth_path_num)
-	erb :index
-end
-=end
+
+
+
+

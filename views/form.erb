@@ -4,12 +4,18 @@
 		<p>St. Augustine of Hippo (A.D. 354–430) wrote "Numbers are the Universal language offered by the deity to humans as confirmation of the truth." Similar to Pythagoras, he too believed that everything had numerical relationships and it was up to the mind to seek and investigate the secrets of these relationships or have them revealed by divine grace. - <a href="https://en.wikipedia.org/wiki/Pythagoras" target="_blank">Wikipedia</a></p>
 	</div>
 
+	<!-- error message for DOB form entry using incorrect format -->
+	<% if !@error.nil? %>
+		<p><%= @error %></p>
+	<% end %>
+
+	<!-- user input form for DOB -->
 	<form class="col-md-3" action= "/" method="post">
 		<div class="form-group">
 			<label for="birthdate">Enter your birthdate</label>
-			<input class="form-control" name="birthdate" type="date" />
+			<input class="form-control" name="birthdate" type="text" />
 		</div>
 		
 		<input class="btn btn-default" type="submit" />
-	</form>
+	</form> <!-- end user input form -->
 </div>
