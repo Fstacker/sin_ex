@@ -64,8 +64,9 @@ post '/' do
 		birth_path_num = get_birth_path_num(birthdate)
 		redirect "/message/#{birth_path_num}"
 	else
-		@error = "We do not recognize your DOB format.  Please try again."
 		erb :form
+		@error = "Oops! You should enter a valid birthdate in the form of mmddyyyy. Try again!"
+		erb @error
 	end
 end
 
@@ -74,7 +75,7 @@ def setup_index_view
 	birthdate = params[:birthdate]
 	birth_path_num = get_birth_path_num(birthdate)
 	@message = "Your numerology number is #{birth_path_num}.  " + get_message(birth_path_num)
-	erb :index
+	erb :form
 end
 
 def valid_birthdate(input)
@@ -85,6 +86,7 @@ def valid_birthdate(input)
 		false
 	end
 end
+
 
 
 
